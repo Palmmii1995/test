@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบลงเวลาการทำงาน</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #0d1b2a; /* Deep dark blue */
+            color: #ffffff;
+        }
+        .container {
+            text-align: center;
+            background: #1b263b; /* Dark blue */
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+            width: 300px;
+            border: 2px solid #415a77; /* Light steel blue border */
+        }
+        .time-display {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #e0e1dd; /* Soft white */
+        }
+        label {
+            color: #e0e1dd; /* Soft white */
+            font-weight: bold;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #415a77;
+            border-radius: 5px;
+            font-size: 1em;
+            box-sizing: border-box;
+            background-color: #1b263b;
+            color: #ffffff;
+        }
+        input::placeholder {
+            color: #748a9d;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            cursor: pointer;
+            font-weight: bold;
+            color: #ffffff;
+        }
+        .btn-submit {
+            background-color: #d1495b; /* Vibrant red */
+        }
+        .btn-back {
+            background-color: #007ea7; /* Bright blue */
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        .hidden {
+            display: none;
+        }
+        .btn-submit:hover {
+            background-color: #a13145; /* Darker red */
+        }
+        .btn-back:hover {
+            background-color: #005f80; /* Darker blue */
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="form-container">
+        <div class="time-display" id="current-time">00:00 AM</div>
+        <label for="employee-id">กรอกรหัสพนักงาน</label>
+        <input type="text" id="employee-id" placeholder="รหัสพนักงาน">
+        <button class="btn-submit" onclick="submitTime()">ลงเวลา</button>
+        <button class="btn-back">ย้อนกลับ</button>
+    </div>
+
+    <div class="container hidden" id="summary-container">
+        <div class="time-display" id="summary-time">00:00 AM</div>
+        <div>ยืนยันการลงเวลา</div>
+        <div id="summary-id"><em>รหัสพนักงาน</em></div>
+        <button class="btn-back" onclick="goBack()">ย้อนกลับ</button>
+    </div>
+
+    <script>
+        function updateTime() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            const formattedHours = hours % 12 || 12;
+            const formattedMinutes = minutes.toString().padStart(2, '0');
+            const timeString = `${formattedHours}:${formattedMinutes} ${ampm}`;
+
+            document.getElementById('current-time').textContent = timeString;
+            document.getElementById('summary-time').textContent = timeString;
+        }
+
+        function submitTime() {
+            const employeeId = document.getElementById('employee-id').value;
+            if (employeeId.trim() === '') {
+                alert('กรุณากรอกรหัสพนักงาน');
+                return;
+            }
+
+            document.getElementById('summary-id').textContent = employeeId;
+            document.getElementById('form-container').classList.add('hidden');
+            document.getElementById('summary-container').classList.remove('hidden');
+        }
+
+        function goBack() {
+            document.getElementById('form-container').classList.remove('hidden');
+            document.getElementById('summary-container').classList.add('hidden');
+        }
+
+        setInterval(updateTime, 1000);
+        updateTime(); // Initial call
+    </script>
+</body>
+</html>
